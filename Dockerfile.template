@@ -3,7 +3,7 @@
 # BUILD: docker build --rm -t keng000/kube-airflow
 # SOURCE: https://github.com/keng000/kube-airflow
 
-FROM    python:3.7-slim
+FROM    python:3.7-slim-stretch
 MAINTAINER Kengo Miyakawa <s_flashback@yahoo.co.jp>
 
 # Never prompts the user for choices on installation/configuration of packages
