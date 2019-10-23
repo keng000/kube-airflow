@@ -134,7 +134,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: web
-          image: keng000/kube-airflow:1.10.5-1.6.1
+          image: keng000/kube-airflow:3.7-1.10.5-1.6.1
           env:
             - name: AIRFLOW_HOME
               value: "/usr/local/airflow"
@@ -164,7 +164,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: flower
-          image: keng000/kube-airflow:1.10.5-1.6.1 
+          image: keng000/kube-airflow:3.7-1.10.5-1.6.1
           env:
             - name: AIRFLOW_HOME
               value: "/usr/local/airflow"
@@ -190,7 +190,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: scheduler
-          image: keng000/kube-airflow:1.10.5-1.6.1 
+          image: keng000/kube-airflow:3.7-1.10.5-1.6.1
           env:
             - name: AIRFLOW_HOME
               value: "/usr/local/airflow"
@@ -211,7 +211,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: worker
-          image: keng000/kube-airflow:1.10.5-1.6.1
+          image: keng000/kube-airflow:3.7-1.10.5-1.6.1
           env:
             - name: AIRFLOW_HOME
               value: "/usr/local/airflow"
