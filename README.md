@@ -3,6 +3,38 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/stibbons31/kube-airflow.svg?maxAge=2592000)]()
 [![Docker Stars](https://img.shields.io/docker/stars/stibbons31/kube-airflow.svg?maxAge=2592000)]()
 
+## Difference from the [Base Repo](https://github.com/mumoshu/kube-airflow)
+
+* Support Python 3.7 / 3.8
+* Avoid pip update error (`ImportError: No module named pip`)
+
+### Support Python 3.7 / 3.8
+
+Now you can use python3.7, python3.8 for the airflow execution environments.
+
+To switch the environment, you just need to change the image in the kubernetes manifest.
+If you want to use your own image, you need to build it.
+
+#### Build example
+
+Example to build with python3.8
+
+
+```
+$ sed -i '' -e's/python:3.7-slim-stretch/python:3.8-slim/g' Dockerfile.template 
+$ PYTHON_VERSION=3.8 make build 
+# -> keng000/kube-airflow:3.8-1.10.5-1.6.1-0.10
+```
+
+#### Prepared Image
+
+prepared docker image are bellow.
+
+* keng000/kube-airflow:3.7-1.10.5-1.6.1-0.10
+* keng000/kube-airflow:3.8-1.10.5-1.6.1-0.10
+
+## Description
+
 kube-airflow provides a set of tools to run Airflow in a Kubernetes cluster.
 This is useful when you'd want:
 
@@ -22,7 +54,7 @@ This repository contains:
 
 * Fork of [mumoshu/kube-airflow](https://github.com/mumoshu/kube-airflow)
 * Highly inspired by the great work [puckel/docker-airflow](https://github.com/puckel/docker-airflow)
-* Based on Debian Stretch official Image [debian:stretch](https://registry.hub.docker.com/_/debian/) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [RabbitMQ](https://hub.docker.com/_/rabbitmq/) as queue
+* Based on Debian Stretch based Python official Image [python:3.7-slim-stretch](https://registry.hub.docker.com/_/python/) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [RabbitMQ](https://hub.docker.com/_/rabbitmq/) as queue
 * Following the Airflow release from [Python Package Index](https://pypi.python.org/pypi/airflow)
 
 ## Manual Installation

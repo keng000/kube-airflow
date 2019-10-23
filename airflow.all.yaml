@@ -194,7 +194,7 @@ spec:
           env:
             - name: AIRFLOW_HOME
               value: "/usr/local/airflow"
-          args: ["scheduler", "-n", "-1"]
+          args: ["scheduler", "-n", "5"]
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
