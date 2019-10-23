@@ -77,18 +77,18 @@ spec:
         tier: db
     spec:
       containers:
-      - name: postgres
-        image: postgres
-        ports:
         - name: postgres
-          containerPort: 5432
-        env:
-         - name: POSTGRES_USER
-           value: "airflow"
-         - name: POSTGRES_PASSWORD
-           value: "airflow"
-         - name: POSTGRES_DB
-           value: "airflow"
+          image: postgres
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "airflow"
+            - name: POSTGRES_PASSWORD
+              value: "airflow"
+            - name: POSTGRES_DB
+              value: "airflow"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -104,20 +104,20 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - name: rabbitmq
-        image: rabbitmq:3-management
-        ports:
-        - name: management
-          containerPort: 15672
-        - name: node
-          containerPort: 5672
-        env:
-        - name: RABBITMQ_DEFAULT_USER
-          value: airflow
-        - name: RABBITMQ_DEFAULT_PASS
-          value: airflow
-        - name: RABBITMQ_DEFAULT_VHOST
-          value: airflow
+        - name: rabbitmq
+          image: rabbitmq:3-management
+          ports:
+            - name: management
+              containerPort: 15672
+            - name: node
+              containerPort: 5672
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: airflow
+            - name: RABBITMQ_DEFAULT_PASS
+              value: airflow
+            - name: RABBITMQ_DEFAULT_VHOST
+              value: airflow
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -133,21 +133,21 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - name: web
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
-        env:
-        - name: AIRFLOW_HOME
-          value: "/usr/local/airflow"
-        ports:
         - name: web
-          containerPort: 8080
-        args: ["webserver"]
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 240
-          periodSeconds: 60
+          image: keng000/kube-airflow:1.10.5-1.6.1
+          env:
+            - name: AIRFLOW_HOME
+              value: "/usr/local/airflow"
+          ports:
+            - name: web
+              containerPort: 8080
+          args: ["webserver"]
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 240
+            periodSeconds: 60
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -163,18 +163,17 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - name: flower
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
-        env:
-        - name: AIRFLOW_HOME
-          value: "/usr/local/airflow"
-        # To prevent the error: ValueError: invalid literal for int() with base 10: 'tcp://10.0.0.83:5555'
-        - name: FLOWER_PORT
-          value: "5555"
-        ports:
         - name: flower
-          containerPort: 5555
-        args: ["flower"]
+          image: keng000/kube-airflow:1.10.5-1.6.1 
+          env:
+            - name: AIRFLOW_HOME
+              value: "/usr/local/airflow"
+            - name: FLOWER_PORT
+              value: "5555"
+          ports:
+            - name: flower
+              containerPort: 5555
+          args: ["flower"]
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -190,14 +189,12 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - name: scheduler
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
-        # volumes:
-        #     - /localpath/to/dags:/usr/local/airflow/dags
-        env:
-        - name: AIRFLOW_HOME
-          value: "/usr/local/airflow"
-        args: ["scheduler", "-n", "5"]
+        - name: scheduler
+          image: keng000/kube-airflow:1.10.5-1.6.1 
+          env:
+            - name: AIRFLOW_HOME
+              value: "/usr/local/airflow"
+          args: ["scheduler", "-n", "-1"]
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -213,11 +210,9 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - name: worker
-        image: mumoshu/kube-airflow:1.8.0.0-1.6.1
-        # volumes:
-        #     - /localpath/to/dags:/usr/local/airflow/dags
-        env:
-        - name: AIRFLOW_HOME
-          value: "/usr/local/airflow"
-        args: ["worker"]
+        - name: worker
+          image: keng000/kube-airflow:1.10.5-1.6.1
+          env:
+            - name: AIRFLOW_HOME
+              value: "/usr/local/airflow"
+          args: ["worker"]

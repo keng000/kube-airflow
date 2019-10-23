@@ -1,11 +1,10 @@
-# VERSION 1.8.0.0
-# AUTHOR: Yusuke KUOKA
+# AUTHOR: Kengo Miyakawa
 # DESCRIPTION: Docker image to run Airflow on Kubernetes which is capable of creating Kubernetes jobs
-# BUILD: docker build --rm -t mumoshu/kube-airflow
-# SOURCE: https://github.com/mumoshu/kube-airflow
+# BUILD: docker build --rm -t keng000/kube-airflow
+# SOURCE: https://github.com/keng000/kube-airflow
 
-FROM    debian:stretch
-MAINTAINER Yusuke KUOKA <ykuoka@gmail.com>
+FROM    python:3.7-slim-stretch
+MAINTAINER Kengo Miyakawa <s_flashback@yahoo.co.jp>
 
 # Never prompts the user for choices on installation/configuration of packages
 ENV     DEBIAN_FRONTEND noninteractive
@@ -43,8 +42,6 @@ RUN         set -ex \
                 libssl-dev \
                 libxml2-dev \
                 libxslt1-dev \
-                python3-dev \
-                python3-pip \
                 zlib1g-dev \
             ' \
         &&  apt-get update -yqq \
@@ -55,15 +52,14 @@ RUN         set -ex \
                 git \
                 locales \
                 netcat \
-        &&      sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
+                default-libmysqlclient-dev \
+        &&  sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
         &&  locale-gen \
         &&  update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
         &&  useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-        &&  pip3 install --upgrade pip 'setuptools!=36.0.0' \
-        &&  if [ ! -e /usr/bin/pip ]; then ln -s /usr/bin/pip3 /usr/bin/pip ; fi \
-        &&  if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi \
-        &&  pip3 install -r /requirements/airflow.txt \
-        &&  pip3 install -r /requirements/dags.txt \
+        &&  pip install setuptools wheel \
+        &&  pip install -r /requirements/airflow.txt \
+        &&  pip install -r /requirements/dags.txt \
         &&  apt-get remove --purge -yqq $buildDeps libpq-dev \
         &&  apt-get clean \
         &&  rm -rf \
